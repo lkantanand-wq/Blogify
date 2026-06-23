@@ -8,14 +8,14 @@ const { checkForAuthenticationCookie } = require("./middlewares/auth");
 const Blog = require("./models/blog");
 
 mongoose
-  .connect(process.env.MONGO_URL)
+  .connect(process.env.MONGO_URL  ||  "mongodb://localhost:27017/yt-blog")
   .then(() => console.log("Connected to DB"))
   .catch((err) => console.log(err));
 const userRoute = require("./routes/user");
 const blogRoute = require("./routes/blog");
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT  ||  3000;
 
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));

@@ -1,6 +1,6 @@
 const JWT = require("jsonwebtoken");
 
-const secret = "Lakshita"
+const secret = process.env.JWT_SECRET || "Lakshita";
 
 function createUserToken(user) {
     const payload = {

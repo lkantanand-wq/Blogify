@@ -17,10 +17,26 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-router.get("/add-new", (req, res) => {
+function requireAuth(req, res, next) {
+  if (!req.user) {
+    return res.redirect("/user/signin");
+  }
+  return next();
+}
+
+router.get("/add-new", requireAuth, (req, res) => {
   return res.render("addBlog", {
     user: req.user,
   });
+});
+
+router.post("/delete/:id", requireAuth, async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+  if (!blog || blog.createdBy.toString() !== req.user._id) {
+    return res.redirect("/");
+  }
+  await blog.deleteOne();
+  return res.redirect("/");
 });
 
 router.get("/:id", async (req, res) => {
